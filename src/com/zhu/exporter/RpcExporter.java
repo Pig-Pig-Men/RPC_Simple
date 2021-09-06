@@ -45,9 +45,11 @@ public class RpcExporter {
                 String interfaceName = input.readUTF();
                 Class<?> service = Class.forName(interfaceName);
                 String methodName = input.readUTF();
+                //通过input.readObject进行反序列化
                 Class<?>[] parameterTypes = (Class<?>[]) input.readObject();
                 Object[] arguments = (Object[]) input.readObject();
                 Method method = service.getMethod(methodName,parameterTypes);
+                //调用类中的方法
                 Object result = method.invoke(service.newInstance(),arguments);
                 output = new ObjectOutputStream(client.getOutputStream());
                 output.writeObject(result);
